@@ -494,7 +494,7 @@ def csv_import(filename=None):
             if not new_item_count:  # skip the row labels
                 new_item_count = 1
                 continue
-            row = {label: item.replace(os.linesep, ' ') for label, item in zip(columns, line)}
+            row = {label: item.replace(os.linesep, ' ').replace('''"''','') for label, item in zip(columns, line)}
             # check that item is not already in database
             existing_item = Phone.query.filter_by(MEID=row['MEID']).first()
             if existing_item:
