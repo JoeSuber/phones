@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "navbar.html" as navbar %}
+{% import "flasher.html" as flasher %}
+
+{% block title %}
+Overdue Device Report
+{% endblock %}
+
+{% block content %}
+
+{{ navbar }}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+{% endblock %}
+
+    <div class="container">
+    <b> {{ message }} </b>
+      <form class="form-signin" method="POST" action="/overdue">
+        <h2 class="form-signin-heading">Enter Time Delta</h2>
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.timeframe) }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">submit</button>
+      </form>
+    </div> <!-- /container -->
+{% endblock %}

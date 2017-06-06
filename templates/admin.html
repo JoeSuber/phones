@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "navbar.html" as navbar %}
+{% import "flasher.html" as flasher %}
+
+{% block title %}
+Administration
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+{% endblock %}
+
+{% block content %}
+
+{{ navbar }}
+
+<div class="container">
+    <b>Admin User: {{ name }} </b>
+    <li>  -  </li>
+
+    <li><strong><a href="{{ url_for('newdevice') }}">Add New Devices to {{ name }}'s control</a></strong></li>
+    <li><strong><a href="{{ url_for('meidedit') }}">Edit/View a Device (using meid)</a></strong></li>
+    <li>  - </li>
+    <li><strong><a href="{{ url_for('oemreport') }}">email {{ name }} an OEM report</a></strong></li>
+    <li><strong><a href="{{ url_for('overdue') }}">email {{ name }} 'devices overdue' report </a></strong></li>
+    <li>  - </li>
+    <li><strong><a href="{{ url_for('newperson') }}">Add New Regular Users and Admins</a></strong></li>
+    <li><strong><a href="{{ url_for('newpass') }}">Change a Password for {{ name }} or a regular user</a></strong></li>
+    <li><strong><a href="{{ url_for('logout') }}">Log Out of Administrator Mode</a></strong></li>
+</div> <!-- /container -->
+{% endblock %}

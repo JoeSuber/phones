@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "navbar.html" as navbar %}
+{% import "flasher.html" as flasher %}
+
+{% block title %}
+Edit Device Info
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+{% endblock %}
+
+{% block content %}
+
+{{ navbar }}
+
+<div class="container">
+
+  <form class="form-signin" method="POST" action="/editdevice">
+    <h2 class="form-signin-heading">Edit Device Data</h2>
+    {{ form.hidden_tag() }}
+    <l1> Editing Device: {{ form.MEID.data }}</l1>
+    {{ wtf.form_field(form.OEM) }}
+    {{ wtf.form_field(form.SKU) }}
+    {{ wtf.form_field(form.MODEL) }}
+    {{ wtf.form_field(form.MSL) }}
+    {{ wtf.form_field(form.Hardware_Version) }}
+    {{ wtf.form_field(form.Serial_Number) }}
+    {{ wtf.form_field(form.Comment) }}
+    {{ wtf.form_field(form.Archived) }}
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit Changes</button>
+  </form>
+
+</div> <!-- /container -->
+{% endblock %}
