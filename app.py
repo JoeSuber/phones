@@ -495,6 +495,7 @@ def csv_import(filename=None):
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         column_checksum = len(columns)
         for num, line in enumerate(spamreader):
+            line = [l.strip() for l in line]
             if not new_item_count:  # skip the row labels
                 new_item_count = 1
                 continue
@@ -507,7 +508,7 @@ def csv_import(filename=None):
             existing_item = Phone.query.filter_by(MEID=row['MEID']).first()
             if existing_item:
                 existing_item_count += 1
-                print("!{:5} Item exists {}".format(row['MEID']))
+                print("!{:5} Item exists {}".format(num, row['MEID']))
                 continue
 
             print("#{:5}: {}".format(num, row))
