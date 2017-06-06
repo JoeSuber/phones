@@ -19,6 +19,25 @@ from datetime import datetime, timedelta
 # ssl encrypt: https://www.youtube.com/watch?v=2iXfGn1Ur6U
 # http://terokarvinen.com/2016/deploy-flask-python3-on-apache2-ubuntu
 git config --list --show-origin
+
+sudoedit /etc/apache2/sites-available/app.conf
+
+## /etc/apache2/sites-available/app.conf
+<VirtualHost *:80>
+ ServerName howdey.com
+
+ WSGIDaemonProcess app user=jsuber group=jsuber threads=5
+ WSGIScriptAlias / /home/jsuber/phones/app.wsgi
+
+<Directory /home/jsuber/phones/>
+ WSGIProcessGroup app
+ WSGIApplicationGroup %{GLOBAL}
+ WSGIScriptReloading On
+
+ Require all granted
+</Directory>
+</VirtualHost>
+
 """
 ###################################################################################
 # DONT FORGET! to uncomment the '@login_required' for newperson() upon deployment
