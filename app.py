@@ -491,16 +491,14 @@ def csv_import(filename=None):
         filename = os.path.join(os.getcwd(), "scotts.csv")
     columns = _columns
     new_item_count, existing_item_count = 0, 0
-    with open(filename, newline=os.linesep) as csvfile:
+    with open(filename, "rU", quotechar='"', delimiter = ',') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
         column_checksum = len(columns)
         for num, line in enumerate(spamreader):
-            print(len(line))
-            line = [l.strip() for l in line]
             if not new_item_count:  # skip the row labels
                 new_item_count = 1
                 continue
-            row = {label: item.replace("\n", ' ').replace('''"''','') for label, item in zip(columns, line)}
+            row = {label: item.strip() for label, item in zip(columns, line)}
             if len(row) != column_checksum:
                 print("ABORT! on bad row: {}".format(row))
                 print("Import not finished! Fix data")
