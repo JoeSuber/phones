@@ -493,19 +493,24 @@ def csv_import(filename=None):
     new_item_count, existing_item_count = 0, 0
     with open(filename, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
-        for line in spamreader:
+        column_checksum = len(columns)
+        for num, line in enumerate(spamreader):
             if not new_item_count:  # skip the row labels
                 new_item_count = 1
                 continue
-            row = {label: item.replace(os.linesep, ' ').replace('''"''','') for label, item in zip(columns, line)}
+            row = {label: item.replace("\n", ' ').replace('''"''','') for label, item in zip(columns, line)}
+            if len(row) != column_checksum:
+                print("ABORT! on bad row: {}".format(row))
+                print("Import not finished! Fix data")
+                exit(1)
             # check that item is not already in database
             existing_item = Phone.query.filter_by(MEID=row['MEID']).first()
             if existing_item:
                 existing_item_count += 1
-                print("Item exists {}".format(row['MEID']))
+                print("!{:5} Item exists {}".format(row['MEID']))
                 continue
 
-            print("import: {}".format(row))
+            print("#{:5}: {}".format(num, row))
             new_device = Phone(OEM=row['OEM'],
                                MEID=row['MEID'],
                                SKU=row['SKU'],
