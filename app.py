@@ -482,8 +482,11 @@ def datefix(datestr):
 
 
 def csv_import(filename=None):
-    """ Assumes users have kept columns in the _column list-order. 
-        Puts csv spreadsheet-derived data into database."""
+    """ Assumes users have kept columns in the _column list-order.
+        Puts csv spreadsheet-derived data into database.
+        (to use, download and save the inventory sheets as .csv files with those
+        particular columns)
+        """
     if not filename:
         filename = os.path.join(os.getcwd(), "scotts.csv")
     columns = _columns
