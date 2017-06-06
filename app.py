@@ -491,8 +491,8 @@ def csv_import(filename=None):
         filename = os.path.join(os.getcwd(), "scotts.csv")
     columns = _columns
     new_item_count, existing_item_count = 0, 0
-    with open(filename, "rU", quotechar='"', delimiter = ',') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    with open(filename, "rU") as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
         column_checksum = len(columns)
         for num, line in enumerate(spamreader):
             if not new_item_count:  # skip the row labels
