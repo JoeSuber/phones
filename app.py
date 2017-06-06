@@ -41,7 +41,7 @@ app.config.update(
     MAIL_PORT = 465,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
-    MAIL_PASSWORD = ''
+    MAIL_PASSWORD = '31stCentury!MtG'
 )
 
 Bootstrap(app)
@@ -597,4 +597,4 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 if __name__ == '__main__':
     # app.run(debug=False)
-    app.run(host='0.0.0.0')
+    app.run()
