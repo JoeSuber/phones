@@ -1,1 +1,1 @@
-web gunicorn phonehome:app --log-file -
+web gunicorn phones:app --log-file -
