@@ -11,12 +11,15 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import pickle, os, csv
 from datetime import datetime, timedelta
 
+"""
 # todo: take a look at codepen.io
 # https://askubuntu.com/questions/865554/how-do-i-install-python-3-6-using-apt-get
-# https://gist.github.com/GrahamDumpleton/b79d336569054882679e
 # https://askubuntu.com/questions/716429/how-to-put-my-server-on-the-internet
 # https://help.ubuntu.com/lts/serverguide/httpd.html#https-configuration
 # ssl encrypt: https://www.youtube.com/watch?v=2iXfGn1Ur6U
+# http://terokarvinen.com/2016/deploy-flask-python3-on-apache2-ubuntu
+git config --list --show-origin
+"""
 ###################################################################################
 # DONT FORGET! to uncomment the '@login_required' for newperson() upon deployment
 ###################################################################################
@@ -27,11 +30,7 @@ app.config['SECRET_KEY'] = os.urandom(24)
 
 __dbfn__ = "DVTCinventory"
 __sqlext__ = '.sqlite'
-__sql_inventory_fn__ = os.getcwd() + os.sep + __dbfn__ + __sqlext__
-
-#if os.name is 'nt':
-#    __sql_inventory_fn__ = "C:\\Users\\2053_HSUF\\PycharmProjects\\phones\\DVTCinventory.sqlite"
-
+__sql_inventory_fn__ = os.path.join(os.getcwd(), (__dbfn__ + __sqlext__))
 print("Database file located at: {}".format(__sql_inventory_fn__))
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + __sql_inventory_fn__
@@ -599,6 +598,3 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 if __name__ == '__main__':
     app.run(debug=False)
     # app.run(host='0.0.0.0')
-"""
-http://terokarvinen.com/2016/deploy-flask-python3-on-apache2-ubuntu
-"""
