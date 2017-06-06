@@ -597,4 +597,4 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 if __name__ == '__main__':
     # app.run(debug=False)
-    app.run()
+    app.run(host='0.0.0.0')
