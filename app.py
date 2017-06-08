@@ -18,6 +18,8 @@ from datetime import datetime, timedelta
 # https://help.ubuntu.com/lts/serverguide/httpd.html#https-configuration
 # ssl encrypt: https://www.youtube.com/watch?v=2iXfGn1Ur6U
 # http://terokarvinen.com/2016/deploy-flask-python3-on-apache2-ubuntu
+https://www.youtube.com/watch?v=cXL8FDUag-s
+
 git config --list --show-origin
 
 sudoedit /etc/apache2/sites-available/app.conf
