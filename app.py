@@ -18,20 +18,24 @@ from datetime import datetime, timedelta
 # https://help.ubuntu.com/lts/serverguide/httpd.html#https-configuration
 # ssl encrypt: https://www.youtube.com/watch?v=2iXfGn1Ur6U
 # http://terokarvinen.com/2016/deploy-flask-python3-on-apache2-ubuntu
+
 https://www.youtube.com/watch?v=cXL8FDUag-s
+
+MEID to MEIDhex: http://www.howardforums.com/showthread.php/1433623-How-to-Calculate-MEID-DEC-and-P(ESN)
+    https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/meid.py
 
 git config --list --show-origin
 
 sudoedit /etc/apache2/sites-available/app.conf
 
-## /etc/apache2/sites-available/app.conf
+## /etc/httpd/sites-available/app.conf
 <VirtualHost *:80>
- ServerName howdey.com
+ ServerName www.dvtandc.com/inventory
 
- WSGIDaemonProcess app user=jsuber group=jsuber threads=5
- WSGIScriptAlias / /home/jsuber/phones/app.wsgi
+ WSGIDaemonProcess app user=joe.suber group=joe.suber threads=5
+ WSGIScriptAlias / /home/joe.suber/phones/app.wsgi
 
-<Directory /home/jsuber/phones/>
+<Directory /home/joe.suber/phones/>
  WSGIProcessGroup app
  WSGIApplicationGroup %{GLOBAL}
  WSGIScriptReloading On
