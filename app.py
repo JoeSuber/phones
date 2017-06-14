@@ -32,8 +32,8 @@ sudoedit /etc/apache2/sites-available/app.conf
 <VirtualHost *:80>
  ServerName www.dvtandc.com/inventory
 
- WSGIDaemonProcess app user=joe.suber group=joe.suber threads=5
- WSGIScriptAlias / /home/joe.suber/phones/app.wsgi
+ WSGIDaemonProcess app user=joe.suber group=joe.suber threads=5 home=/user/joe.suber/phones
+ WSGIScriptAlias /inventory /home/joe.suber/phones/app.wsgi
 
 <Directory /home/joe.suber/phones/>
  WSGIProcessGroup app
@@ -66,7 +66,7 @@ app.config.update(
     MAIL_PORT = 465,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
-    MAIL_PASSWORD = '31stCentury!MtG'
+    MAIL_PASSWORD = ''
 )
 
 Bootstrap(app)
