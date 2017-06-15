@@ -10,6 +10,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 # from flask_sslify import SSLify
 import pickle, os, csv
 from datetime import datetime, timedelta
+import codecs
 
 """
 # todo: take a look at codepen.io
@@ -626,6 +627,17 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     mail.send(message)
     print("sent mail from {} to {}".format(sender, email))
     return True
+
+
+def dumpty():
+    with codecs.open("C:\\Users\\2053_HSUF\\Desktop\\adblogcat.txt", 'rU', 'utf-16') as fob:
+        for linenum, line in enumerate(fob.readlines()):
+            parts = line.strip().split(" ")
+            try:
+                print(linenum, " : ", parts[5])
+            except:
+                print("badline_____________________")
+
 
 
 if __name__ == '__main__':
