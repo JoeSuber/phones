@@ -632,12 +632,11 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 def dumpty():
     with codecs.open("C:\\Users\\2053_HSUF\\Desktop\\adblogcat.txt", 'rU', 'utf-16') as fob:
         for linenum, line in enumerate(fob.readlines()):
-            parts = line.strip().split(" ")
+            parts = line.strip().split(":")
             try:
-                print(linenum, " : ", parts[5])
+                print(linenum, " : ", parts[2].split(' ')[-1])
             except:
                 print("badline_____________________")
-
 
 
 if __name__ == '__main__':
