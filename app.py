@@ -209,9 +209,9 @@ class OverdueForm(FlaskForm):
 ###########################
 ####### Routes ############
 ###########################
-sub = '/inventory'
+sub = ''
 
-@app.route(sub, methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     # step 1, get the badge to get the user
     session['userid'] = None
