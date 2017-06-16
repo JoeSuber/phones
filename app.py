@@ -209,7 +209,9 @@ class OverdueForm(FlaskForm):
 ###########################
 ####### Routes ############
 ###########################
-@app.route('/', methods=['GET', 'POST'])
+sub = '/inventory'
+
+@app.route(sub, methods=['GET', 'POST'])
 def index():
     # step 1, get the badge to get the user
     session['userid'] = None
@@ -225,7 +227,7 @@ def index():
     return render_template('index.html', form=form, message=message)
 
 
-@app.route('/meid', methods=['GET', 'POST'])
+@app.route(sub + '/meid', methods=['GET', 'POST'])
 def meid():
     # step 2, get the device, change owner
     form = MeidForm()
@@ -254,7 +256,7 @@ def meid():
     return render_template('meid.html', form=form, name=username)
 
 
-@app.route('/newperson', methods=['GET', 'POST'])
+@app.route(sub + '/newperson', methods=['GET', 'POST'])
 # @login_required  ### <-- uncomment after adding first admin user to database
 def newperson():
     form = RegisterForm()
@@ -275,7 +277,7 @@ def newperson():
     return render_template('signup.html', form=form)
 
 
-@app.route('/newdevice', methods=['GET', 'POST'])
+@app.route(sub + '/newdevice', methods=['GET', 'POST'])
 @login_required
 def newdevice():
     form = NewDevice()
@@ -298,7 +300,7 @@ def newdevice():
     return render_template('newdevice.html', form=form)
 
 
-@app.route('/admin')
+@app.route(sub + '/admin')
 @login_required
 def admin():
     user = User.query.get(int(current_user.id))
@@ -307,7 +309,7 @@ def admin():
     return redirect(url_for('login'))
 
 
-@app.route('/newpass', methods=['GET', 'POST'])
+@app.route(sub + '/newpass', methods=['GET', 'POST'])
 @login_required
 def newpass():
     message = None
@@ -330,7 +332,7 @@ def newpass():
     return render_template('newpass.html', form=form, name=user.username, message=message)
 
 
-@app.route('/meidedit', methods=['GET', 'POST'])
+@app.route(sub + '/meidedit', methods=['GET', 'POST'])
 @login_required
 def meidedit():
     form = MeidForm()
@@ -343,7 +345,7 @@ def meidedit():
     return render_template('meidedit.html', form=form)
 
 
-@app.route('/editdevice', methods=['GET', 'POST'])
+@app.route(sub + '/editdevice', methods=['GET', 'POST'])
 @login_required
 def editdevice():
     try:
@@ -379,7 +381,7 @@ def editdevice():
     return render_template('editdevice.html', form=newform)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route(sub + '/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     message = None
@@ -397,7 +399,7 @@ def login():
     return render_template('login.html', form=form, message=message)
 
 
-@app.route('/oemreport', methods=['GET', 'POST'])
+@app.route(sub + '/oemreport', methods=['GET', 'POST'])
 @login_required
 def oemreport():
     user = load_user(current_user.id)
@@ -411,7 +413,7 @@ def oemreport():
     return render_template('oemreport.html', form=form, message="send report to: " + user.email)
 
 
-@app.route('/overdue', methods=['GET', 'POST'])
+@app.route(sub + '/overdue', methods=['GET', 'POST'])
 @login_required
 def overdue():
     user=load_user(current_user.id)
@@ -426,7 +428,7 @@ def overdue():
                            message="Please enter the number of days 'out' you are interested in")
 
 
-@app.route('/logout')
+@app.route(sub + '/logout')
 @login_required
 def logout():
     logout_user()
