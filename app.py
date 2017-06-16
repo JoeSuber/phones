@@ -168,7 +168,7 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(min=4, max=50),
                                              Unique(User, User.email, message="Email address already in use")])
-    badge = StringField('badge', validators=[InputRequired(), Length(min=4, max=80),
+    badge = StringField('badge', validators=[InputRequired(), Length(min=10, max=80),
                                              Unique(User, User.badge, message="Badge number already assigned!")])
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15),
                                                    Unique(User, User.username, message="Please choose another name")])
