@@ -40,6 +40,7 @@ sudoedit /etc/apache2/sites-available/app.conf
  WSGIProcessGroup app
  WSGIApplicationGroup %{GLOBAL}
  WSGIScriptReloading On
+ WSGIRestrictStdout Off
 
  Require all granted
 </Directory>
