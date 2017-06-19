@@ -27,9 +27,17 @@ MEID to MEIDhex: http://www.howardforums.com/showthread.php/1433623-How-to-Calcu
 
 git config --list --show-origin
 
-sudoedit /etc/apache2/sites-available/app.conf
+** setup on remote host **
+$ git clone https://github.com/JoeSuber/phones.git
+$ virtualenv --python=$python3 phones/
+$ cd phones/
+$ source bin/activate
+$ pip install requirements.txt
 
-## /etc/httpd/sites-available/app.conf
+$ sudoedit /etc/apache2/sites-available/app.conf
+
+## /etc/apache2/sites-available/app.conf <--ubuntu, etc.
+## /etc/httpd/sites-available/app.conf  <---redhat etc.
 <VirtualHost *:80>
  ServerName www.dvtandc.com/inventory
 
