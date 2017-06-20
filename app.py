@@ -210,8 +210,9 @@ class OverdueForm(FlaskForm):
 ####### Routes ############
 ###########################
 sub = basedir
+print("sub = {}".format(sub))
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route(sub + '/', methods=['GET', 'POST'])
 def index():
     # step 1, get the badge to get the user
     session['userid'] = None
@@ -387,6 +388,7 @@ def login():
     message = None
     if request.method == 'GET':
         session['sent_from'] = request.args.get('next')
+        print("session.sent_from = {}".format(session['sent_from']))
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if check_password_hash(user.password, form.password.data):
@@ -633,4 +635,4 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 if __name__ == '__main__':
     #app.run(debug=True)
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
