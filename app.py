@@ -11,7 +11,11 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 import pickle, os, csv
 from datetime import datetime, timedelta
 
-
+try:
+    from papers import stamp, basedir
+except:
+    stamp = ''
+    basedir = ''
 """
 ** setup on remote host **
 
@@ -63,7 +67,7 @@ app.config.update(
     MAIL_PORT = 465,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
-    MAIL_PASSWORD = ''
+    MAIL_PASSWORD = stamp
 )
 
 Bootstrap(app)
@@ -205,7 +209,7 @@ class OverdueForm(FlaskForm):
 ###########################
 ####### Routes ############
 ###########################
-sub = ''
+sub = basedir
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
