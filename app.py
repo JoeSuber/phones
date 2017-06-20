@@ -13,21 +13,8 @@ from datetime import datetime, timedelta
 
 
 """
-# todo: take a look at codepen.io
-# https://askubuntu.com/questions/865554/how-do-i-install-python-3-6-using-apt-get
-# https://askubuntu.com/questions/716429/how-to-put-my-server-on-the-internet
-# https://help.ubuntu.com/lts/serverguide/httpd.html#https-configuration
-# ssl encrypt: https://www.youtube.com/watch?v=2iXfGn1Ur6U
-# http://terokarvinen.com/2016/deploy-flask-python3-on-apache2-ubuntu
-
-https://www.youtube.com/watch?v=cXL8FDUag-s
-
-MEID to MEIDhex: http://www.howardforums.com/showthread.php/1433623-How-to-Calculate-MEID-DEC-and-P(ESN)
-    https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/meid.py
-
-git config --list --show-origin
-
 ** setup on remote host **
+
 $ git clone https://github.com/JoeSuber/phones.git
 $ virtualenv --python=$python3 phones/
 $ cd phones/
@@ -53,8 +40,8 @@ $ sudoedit /etc/apache2/sites-available/app.conf
  Require all granted
 </Directory>
 </VirtualHost>
-
 """
+
 ###################################################################################
 # DONT FORGET! to uncomment the '@login_required' for newperson() upon deployment
 ###################################################################################
