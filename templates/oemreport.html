@@ -19,7 +19,7 @@ OEM Report Request
 
     <div class="container">
     <b> {{ message }} </b>
-      <form class="form-signin" method="POST" action="/oemreport">
+      <form class="form-signin" method="POST" action="{{ url_for('oemreport') }}">
         <h2 class="form-signin-heading">Enter OEM name</h2>
         {{ form.hidden_tag() }}
         {{ wtf.form_field(form.OEM) }}
