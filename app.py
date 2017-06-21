@@ -221,6 +221,7 @@ def index():
         user = User.query.filter_by(badge=form.badge.data).first()
         session['userid'] = user.id
         return redirect(url_for('meid'))
+
     message = None
     if 'message' in session:
         message = session.pop('message')
