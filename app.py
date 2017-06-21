@@ -274,7 +274,6 @@ def newperson():
         print("NEW USER!  {}".format(logged.username))
         flash("created new user: {}".format(logged.username))
         return redirect(url_for('admin'))
-
     return render_template('signup.html', form=form)
 
 
