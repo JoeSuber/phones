@@ -5,7 +5,9 @@ receivers = ['support@contegix.com', 'joe.suber@dvtandc.com']
 
 for receiver in receivers:
     message = """From: Joe <{}>
+    
     To: Testees <{}>
+    
     Subject: SMTP e-mail test
     
     This is a test e-mail message that hopefully works now and won't end up in spam.
