@@ -63,7 +63,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + __sql_inventory_fn__
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WERKZEUG_DEBUG_PIN'] = False
 app.config.update(
-    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_SERVER = 'localhost',
     MAIL_PORT = 465,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
