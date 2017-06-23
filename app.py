@@ -477,7 +477,8 @@ def csv_dump(phones_fn=None):
     for peep in existing_people:
         print("****")
         for stat in people_columns:
-            print("{}: {}".format(stat, peep.__dict__[stat]))
+            if 'password' not in stat:
+                print("{}: {}".format(stat, peep.__dict__[stat]))
 
 
 def datefix(datestr):
