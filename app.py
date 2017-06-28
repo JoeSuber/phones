@@ -382,6 +382,42 @@ def editdevice():
     return render_template('editdevice.html', form=newform)
 
 
+@app.route(sub + '/editperson/<badge>', methods=['GET', 'POST'])
+@login_required
+def editperson(badge):
+    try:
+        person = User.query.filter_by(badge=badge).first()
+    except KeyError:    # protect against false access attempt
+        return redirect(url_for('meidedit'))
+    # fill is some form blanks for user:
+    newform = NewDevice(MEID=device.MEID,
+                        SKU=device.SKU,
+                        OEM=device.OEM,
+                        MODEL=device.MODEL,
+                        Serial_Number=device.Serial_Number,
+                        Hardware_Version=device.Hardware_Version,
+                        MSL=device.MSL,
+                        Archived=device.Archived,
+                        Comment=device.Comment)
+    if request.method == "POST":
+        history = pickle.loads(device.History)
+        history.append((current_user.id, datetime.utcnow()))
+        device.SKU = newform.SKU.data
+        device.OEM = newform.OEM.data
+        device.MODEL = newform.MODEL.data
+        device.Serial_Number = newform.Serial_Number.data
+        device.Hardware_Version = newform.Hardware_Version.data
+        device.MSL = newform.MSL.data
+        device.Archived = newform.Archived.data
+        device.Comment = newform.Comment.data
+        device.History = pickle.dumps(history)
+        db.session.commit()
+        used = session.pop('editingMEID')
+        print(" {} MEID = {} was updated".format(device.SKU, used))
+        return render_template('admin.html')
+    return render_template('editdevice.html', form=newform)
+
+
 @app.route(sub + '/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -494,10 +530,10 @@ def datefix(datestr):
 
 
 def csv_import(filename=None):
-    """ Assumes users have kept columns in the _column list-order.
-        Puts csv spreadsheet-derived data into database.
+    """ For importing devices into database.
+        Assumes users have kept columns in the _column list-order.
         (to use, download and save the inventory sheets as .csv files with those
-        particular columns)
+        particular columns, in the same column order)
         """
     if not filename:
         filename = os.path.join(os.getcwd(), "scotts.csv")
@@ -567,6 +603,52 @@ def nameid(id_num):
     if person:
         return person.username
     return ''
+
+
+def newpeople(filename=None):
+    """ Import people from the spreadsheet. Save it as a csv"""
+    if not filename:
+        filename = os.path.join(os.getcwd(), "People.csv")
+    columns = ["Full_Name",	"Badge_ID",	"DB_ID", "email", "phone"]
+    new_item_count, existing_item_count = 0, 0
+    with open(filename, "rU") as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+        column_checksum = len(columns)
+        for num, line in enumerate(spamreader):
+            if not new_item_count:  # skip the row labels
+                new_item_count = 1
+                continue
+            row = {label: item.strip() for label, item in zip(columns, line)}
+            if len(row) != column_checksum:
+                print("ABORT! on bad row: {}".format(row))
+                print("Import not finished! Fix data")
+                exit(1)
+            # check that item is not already in database
+            existing_id = User.query.filter_by(id=int(row['DB_ID'])).first()
+            if existing_id:
+                existing_item_count += 1
+                print("!{:5} Person exists {}".format(num, row['DB_ID']))
+                continue
+
+            existing_badge = User.query.filter_by(badge=row['Badge_ID']).first()
+            if existing_badge:
+                existing_item_count += 1
+                print("!{:5} Badge number in use: {}".format(num, row['Badge_ID']))
+                continue
+
+            print("#{:5}: {}".format(num, row))
+            new_person = User(id=int(row['DB_ID']),
+                              badge=row['Badge_ID'],
+                              username=row['Full_Name'])
+            try:
+                db.session.add(new_person)
+                new_item_count += 1
+            except Exception as e:
+                print("ER: {}, {}".format(e, new_person))
+        db.session.commit()
+    print("imported {} people".format(new_item_count - 1))
+    print("ignored {} existing people".format(existing_item_count))
+    return True
 
 
 def report_spamer(spam_list, outfn):
