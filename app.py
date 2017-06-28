@@ -630,6 +630,12 @@ def newpeople(filename=None):
                 print("!{:5} Badge number in use: {}".format(num, row['Badge_ID']))
                 continue
 
+            existing_email = User.query.filter_by(email=row['email']).first()
+            if existing_email:
+                existing_item_count += 1
+                print("!{:5} email in use: {}".format(num, row['email']))
+                continue
+                
             print("#{:5}: {}".format(num, row))
             new_person = User(id=int(row['DB_ID']),
                               badge=row['Badge_ID'],
