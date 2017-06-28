@@ -635,7 +635,7 @@ def newpeople(filename=None):
                 existing_item_count += 1
                 print("!{:5} email in use: {}".format(num, row['email']))
                 continue
-                
+
             print("#{:5}: {}".format(num, row))
             new_person = User(id=int(row['DB_ID']),
                               badge=row['Badge_ID'],
