@@ -633,7 +633,9 @@ def newpeople(filename=None):
             print("#{:5}: {}".format(num, row))
             new_person = User(id=int(row['DB_ID']),
                               badge=row['Badge_ID'],
-                              username=row['Full_Name'])
+                              username=row['Full_Name'],
+                              email=row['email'],
+                              phone_number=row['phone'])
             try:
                 db.session.add(new_person)
                 new_item_count += 1
