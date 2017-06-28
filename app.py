@@ -86,7 +86,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     badge = db.Column(db.String(40), unique=True)
     username = db.Column(db.String(40), unique=True)
-    email = db.Column(db.String(50), unique=True)
+    email = db.Column(db.String(50))
     password = db.Column(db.String(94))
     phone_number = db.Column(db.String(12))
     admin = db.Column(db.Boolean)
