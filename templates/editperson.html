@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "navbar.html" as navbar %}
+{% import "flasher.html" as flasher %}
+
+{% block title %}
+Edit Person
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+{% endblock %}
+
+{% block content %}
+
+{{ navbar }}
+
+<div class="container">
+    {{ flasher }}
+  <form class="form-signin" method="POST" action="{{ url_for('editperson') }}">
+    <h2 class="form-signin-heading">Change Person Info</h2>
+    {{ form.hidden_tag() }}
+    {{ wtf.form_field(form.username) }}
+    {{ wtf.form_field(form.email) }}
+    {{ wtf.form_field(form.phone_number)}}
+    {{ wtf.form_field(form.badge) }}
+    {{ wtf.form_field(form.admin) }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+  </form>
+
+</div> <!-- /container -->
+{% endblock %}

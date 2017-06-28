@@ -390,32 +390,25 @@ def editperson(badge):
     except KeyError:    # protect against false access attempt
         return redirect(url_for('meidedit'))
     # fill is some form blanks for user:
-    newform = NewDevice(MEID=device.MEID,
-                        SKU=device.SKU,
-                        OEM=device.OEM,
-                        MODEL=device.MODEL,
-                        Serial_Number=device.Serial_Number,
-                        Hardware_Version=device.Hardware_Version,
-                        MSL=device.MSL,
-                        Archived=device.Archived,
-                        Comment=device.Comment)
+    newform = RegisterForm(email=person.email,
+                           badge=person.badge,
+                           username=person.username,
+                           phone_number=person.phone_number,
+                           admin=person.admin)
+
     if request.method == "POST":
-        history = pickle.loads(device.History)
-        history.append((current_user.id, datetime.utcnow()))
-        device.SKU = newform.SKU.data
-        device.OEM = newform.OEM.data
-        device.MODEL = newform.MODEL.data
-        device.Serial_Number = newform.Serial_Number.data
-        device.Hardware_Version = newform.Hardware_Version.data
-        device.MSL = newform.MSL.data
-        device.Archived = newform.Archived.data
-        device.Comment = newform.Comment.data
-        device.History = pickle.dumps(history)
+        try:
+            person.email = newform.email.data
+            person.badge = newform.badge.data
+            person.username = newform.username.data
+            person.phone_number = newform.phone_number.data
+            person.admin = newform.admin.data
+        except Exception as e:
+            print("{} -- some damn thing aint right".format(e))
         db.session.commit()
-        used = session.pop('editingMEID')
-        print(" {} MEID = {} was updated".format(device.SKU, used))
+        print(" {} id = {} was updated".format(person.username, person.id))
         return render_template('admin.html')
-    return render_template('editdevice.html', form=newform)
+    return render_template('editperson.html', form=newform)
 
 
 @app.route(sub + '/login', methods=['GET', 'POST'])
