@@ -385,6 +385,7 @@ def editdevice():
 @app.route(sub + '/editperson/<badge>', methods=['GET', 'POST'])
 @login_required
 def editperson(badge):
+    print("badge = {}".format(badge))
     try:
         person = User.query.filter_by(badge=badge).first()
     except KeyError:    # protect against false access attempt
@@ -710,5 +711,5 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 
 if __name__ == '__main__':
-    #app.run(debug=True)
+    # app.run(debug=True)
     app.run(host='0.0.0.0', debug=False)

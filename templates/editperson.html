@@ -19,7 +19,7 @@ Edit Person
 
 <div class="container">
     {{ flasher }}
-  <form class="form-signin" method="POST" action="{{ url_for('editperson') }}">
+  <form class="form-signin" method="POST" action="{{ url_for('editperson', badge=form.badge.data) }}">
     <h2 class="form-signin-heading">Change Person Info</h2>
     {{ form.hidden_tag() }}
     {{ wtf.form_field(form.username) }}
