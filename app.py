@@ -64,7 +64,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WERKZEUG_DEBUG_PIN'] = False
 app.config.update(
     MAIL_SERVER = 'localhost',
-    MAIL_PORT = 465,
+    MAIL_PORT = 25,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
     MAIL_PASSWORD = stamp
@@ -259,7 +259,7 @@ def meid():
 
 
 @app.route(sub + '/newperson', methods=['GET', 'POST'])
-# @login_required  ### <-- uncomment after adding first admin user to database
+@login_required  ### <-- uncomment after adding first admin user to database
 def newperson():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -582,7 +582,7 @@ def import_all_sheets(fns=None):
     """ gather up the .csv files and import them all at once """
     base = os.getcwd()
     if not fns:
-        fns = [os.path.join(base, fn) for fn in os.listdir(base) if fn.endswith(".csv")]
+        fns = [os.path.join(base, fn) for fn in os.listdir(base) if fn.endswith(".csv") and ('newsheet' in fn)]
     for fn in fns:
         print("processing {}".format(fn))
         csv_import(filename=fn)
