@@ -1,7 +1,7 @@
 import smtplib
 
 sender = 'joe.suber@dvtandc.com'
-receivers = ['support@contegix.com', 'joe.suber@dvtandc.com']
+receivers = ['joe.suber@dvtandc.com']
 
 for receiver in receivers:
     message = """From: Joe <{}> \n\r

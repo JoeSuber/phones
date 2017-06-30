@@ -63,12 +63,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + __sql_inventory_fn__
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WERKZEUG_DEBUG_PIN'] = False
 app.config.update(
-    MAIL_SERVER = 'localhost',
-    MAIL_PORT = 25,
+    MAIL_SERVER = 'localhost' if os.name == 'posix' else 'smtp.gmail.com',
+    MAIL_PORT = 25 if os.name == 'posix' else 465,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
     MAIL_PASSWORD = stamp
 )
+
+print("mail server, port = {}, {}".format(app.config['MAIL_SERVER'], app.config['MAIL_PORT']))
 
 Bootstrap(app)
 mail = Mail(app)
@@ -321,15 +323,14 @@ def newpass():
         # allow any admin to change any non-admin. Only allow admin to change their own.
         print("user.username = {}".format(user.username))
         print("changer.username = {}".format(changer.username))
-        if (not changer.admin) or (user.username == changer.username):
+        if user.admin or (user.username == changer.username):
             if form.password.data == form.retype.data:
                 changer.password = generate_password_hash(form.password.data)
                 db.session.commit()
                 print("Changed password for: {}".format(changer.username))
                 return redirect(url_for('admin'))
             message = "Password fields don't match!"
-        else:
-            message = "NOT ALLOWED to change another admin's password"
+
     return render_template('newpass.html', form=form, name=user.username, message=message)
 
 
@@ -389,6 +390,7 @@ def editperson(badge):
     try:
         person = User.query.filter_by(badge=badge).first()
     except KeyError:    # protect against false access attempt
+        print("something amiss")
         return redirect(url_for('meidedit'))
     # fill is some form blanks for user:
     newform = RegisterForm(email=person.email,
@@ -396,16 +398,13 @@ def editperson(badge):
                            username=person.username,
                            phone_number=person.phone_number,
                            admin=person.admin)
-
+    print("person = {}".format(person.username))
     if request.method == "POST":
-        try:
-            person.email = newform.email.data
-            person.badge = newform.badge.data
-            person.username = newform.username.data
-            person.phone_number = newform.phone_number.data
-            person.admin = newform.admin.data
-        except Exception as e:
-            print("{} -- some damn thing aint right".format(e))
+        person.email = newform.email.data
+        person.badge = newform.badge.data
+        person.username = newform.username.data
+        person.phone_number = newform.phone_number.data
+        person.admin = newform.admin.data
         db.session.commit()
         print(" {} id = {} was updated".format(person.username, person.id))
         return render_template('admin.html')
@@ -421,6 +420,9 @@ def login():
         print("session.sent_from = {}".format(session['sent_from']))
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        if (not user.password) or (not form.password.data):
+            session['message'] = "Must supply valid user data."
+            return redirect(url_for('logout'))
         if check_password_hash(user.password, form.password.data):
             login_user(user, remember=True)
             session['userid'] = user.id
