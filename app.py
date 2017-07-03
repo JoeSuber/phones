@@ -63,7 +63,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + __sql_inventory_fn__
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WERKZEUG_DEBUG_PIN'] = False
 app.config.update(
-    MAIL_SERVER = 'localhost' if os.name == 'posix' else 'smtp.gmail.com',
+    MAIL_SERVER = '127.0.0.1' if os.name == 'posix' else 'smtp.gmail.com',
     MAIL_PORT = 25 if os.name == 'posix' else 465,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
@@ -605,6 +605,7 @@ def newpeople(filename=None):
     """ Import people from the spreadsheet. Save it as a csv"""
     if not filename:
         filename = os.path.join(os.getcwd(), "People.csv")
+        print("filename = {}".format(filename))
     columns = ["Full_Name",	"Badge_ID",	"DB_ID", "email", "phone"]
     new_item_count, existing_item_count = 0, 0
     with open(filename, "rU") as csvfile:
@@ -624,6 +625,12 @@ def newpeople(filename=None):
             if existing_id:
                 existing_item_count += 1
                 print("!{:5} Person exists {}".format(num, row['DB_ID']))
+                existing_id.badge=row['Badge_ID']
+                existing_id.username=row['Full_Name']
+                existing_id.email=row['email']
+                existing_id.phone_number=row['phone']
+                db.session.commit()
+                print("details updated for {} (id={})".format(existing_id.username, existing_id.id))
                 continue
 
             existing_badge = User.query.filter_by(badge=row['Badge_ID']).first()
