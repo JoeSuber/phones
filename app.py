@@ -67,7 +67,7 @@ app.config.update(
     MAIL_PORT = 25 if os.name == 'posix' else 465,
     MAIL_USE_SSL = False,
     MAIL_USE_TLS = False,
-    #MAIL_USERNAME = 'joe.suber@dvtandc.com',
+    MAIL_USERNAME = 'joe.suber@dvtandc.com',
     #MAIL_PASSWORD = stamp
 )
 
@@ -740,7 +740,7 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 def send_test():
     message = Message(subject="testes12..3?",
-                      sender='', # app.config['MAIL_USERNAME'],
+                      sender=app.config['MAIL_USERNAME'],
                       recipients=['joe.suber@dvtandc.com'])
     mail.send(message)
 
