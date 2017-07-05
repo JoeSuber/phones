@@ -463,6 +463,12 @@ def overdue():
                            message="Please enter the number of days 'out' you are interested in")
 
 
+@app.route(sub + '/mailtest')
+@login_required
+def mailtest():
+    send_test()
+
+
 @app.route(sub + '/logout')
 @login_required
 def logout():
@@ -721,13 +727,20 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     message = Message(subject=subject + " " + human_name,
                       sender=sender,
                       recipients=[email])
-    #with app.open_resource(attachment_fn) as attachment:
-     #   message.attach(human_name, "spreadsheet/csv", attachment.read())
+    with app.open_resource(attachment_fn) as attachment:
+        message.attach(human_name, "spreadsheet/csv", attachment.read())
     mail.send(message)
     print("sent mail from {} to {}".format(sender, email))
     return True
 
+def send_test():
+    message = Message(subject="testes12..3?",
+                      sender=app.config['MAIL_USERNAME'],
+                      recipients=['joe.suber@dvtandc.com'])
+    mail.send(message)
 
 if __name__ == '__main__':
-    # app.run(debug=True)
-    app.run(host='0.0.0.0', debug=False)
+    if os.name == 'nt':
+        app.run(debug=True)
+    else:
+        app.run(host='0.0.0.0', debug=False)
