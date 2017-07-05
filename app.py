@@ -65,7 +65,7 @@ app.config['WERKZEUG_DEBUG_PIN'] = False
 app.config.update(
     MAIL_SERVER = 'localhost' if os.name == 'posix' else 'smtp.gmail.com',
     MAIL_PORT = 25 if os.name == 'posix' else 465,
-    MAIL_USE_SSL = False,
+    MAIL_USE_SSL = True,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
     MAIL_PASSWORD = stamp
 )
