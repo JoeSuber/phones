@@ -65,9 +65,10 @@ app.config['WERKZEUG_DEBUG_PIN'] = False
 app.config.update(
     MAIL_SERVER = 'localhost' if os.name == 'posix' else 'smtp.gmail.com',
     MAIL_PORT = 25 if os.name == 'posix' else 465,
-    #MAIL_USE_SSL = True,
-    #MAIL_USERNAME = 'joe.suber@dvtandc.com',
-    #MAIL_PASSWORD = stamp
+    MAIL_USE_SSL = True,
+    MAIL_USE_TLS = False,
+    MAIL_USERNAME = 'joe.suber@dvtandc.com',
+    MAIL_PASSWORD = stamp
 )
 
 print("mail server, port = {}, {}".format(app.config['MAIL_SERVER'], app.config['MAIL_PORT']))
@@ -720,8 +721,8 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     message = Message(subject=subject + " " + human_name,
                       sender=sender,
                       recipients=[email])
-    with app.open_resource(attachment_fn) as attachment:
-        message.attach(human_name, "spreadsheet/csv", attachment.read())
+    #with app.open_resource(attachment_fn) as attachment:
+     #   message.attach(human_name, "spreadsheet/csv", attachment.read())
     mail.send(message)
     print("sent mail from {} to {}".format(sender, email))
     return True
