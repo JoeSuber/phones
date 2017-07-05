@@ -740,7 +740,7 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 def send_test():
     message = Message(subject="testes12..3?",
-                      sender=app.config['MAIL_USERNAME'],
+                      sender='', # app.config['MAIL_USERNAME'],
                       recipients=['joe.suber@dvtandc.com'])
     mail.send(message)
 
