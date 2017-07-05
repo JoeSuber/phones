@@ -467,6 +467,10 @@ def overdue():
 @login_required
 def mailtest():
     send_test()
+    user = User.query.get(int(current_user.id))
+    if not user.admin:
+        return redirect(url_for('login'))
+    return render_template('admin.html', name='mail sent whooha')
 
 
 @app.route(sub + '/logout')
@@ -733,11 +737,13 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     print("sent mail from {} to {}".format(sender, email))
     return True
 
+
 def send_test():
     message = Message(subject="testes12..3?",
                       sender=app.config['MAIL_USERNAME'],
                       recipients=['joe.suber@dvtandc.com'])
     mail.send(message)
+
 
 if __name__ == '__main__':
     if os.name == 'nt':
