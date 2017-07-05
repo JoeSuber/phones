@@ -68,7 +68,7 @@ app.config.update(
     MAIL_USE_SSL = False,
     MAIL_USE_TLS = False,
     MAIL_USERNAME = 'joe.suber@dvtandc.com',
-    #MAIL_PASSWORD = stamp
+    MAIL_PASSWORD = stamp
 )
 
 print("mail server, port = {}, {}".format(app.config['MAIL_SERVER'], app.config['MAIL_PORT']))
