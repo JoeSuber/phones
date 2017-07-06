@@ -12,10 +12,11 @@ import pickle, os, csv
 from datetime import datetime, timedelta
 
 try:
-    from papers import stamp, basedir
+    from papers import stamp, basedir, use_local_mail
 except:
     stamp = ''
     basedir = ''
+    use_local_mail = True
 """
 ** setup on remote host **
 
@@ -62,14 +63,16 @@ print("Database file located at: {}".format(__sql_inventory_fn__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + __sql_inventory_fn__
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WERKZEUG_DEBUG_PIN'] = False
-app.config['MAIL_SERVER'] = 'localhost' if os.name == 'posix' else 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 25 if os.name == 'posix' else 465,
-app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_SERVER'] = 'localhost' if use_local_mail else 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 25 if use_local_mail else 465
+app.config['MAIL_USE_SSL'] = False if use_local_mail else True
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USERNAME'] = 'joe.suber@dvtandc.com'
 app.config['MAIL_PASSWORD'] = stamp
 
-print("mail server, port = {}, {}".format(app.config['MAIL_SERVER'], app.config['MAIL_PORT']))
+print("mail server, port, SSL = '{}', '{}', '{}'".format(app.config['MAIL_SERVER'],
+                                                        app.config['MAIL_PORT'],
+                                                        app.config['MAIL_USE_SSL']))
 
 Bootstrap(app)
 mail = Mail(app)
@@ -465,6 +468,7 @@ def overdue():
 @login_required
 def mailtest():
     user = load_user(current_user.id)
+    print(user.email)
     send_test(user.email)
     user = User.query.get(int(current_user.id))
     if not user.admin:
