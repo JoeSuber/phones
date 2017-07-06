@@ -464,7 +464,8 @@ def overdue():
 @app.route(sub + '/mailtest')
 @login_required
 def mailtest():
-    send_test()
+    user = load_user(current_user.id)
+    send_test(user.email)
     user = User.query.get(int(current_user.id))
     if not user.admin:
         return redirect(url_for('login'))
@@ -736,10 +737,10 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     return True
 
 
-def send_test():
+def send_test(email):
     message = Message(subject="testes12..3?",
                       sender=app.config['MAIL_USERNAME'],
-                      recipients=['joe.suber@dvtandc.com'])
+                      recipients=[email])
     mail.send(message)
 
 
