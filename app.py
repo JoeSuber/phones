@@ -757,7 +757,7 @@ def tester_clean(fix=None):
 
 
 def swapm(oem, new_owner):
-    """ app.swapm('Blu', 7) """
+    """ app.swapm('Blu', 7) = change all devices with OEM='Blu' to be owned by DVT_Admin='7' """
     try:
         assert(int(new_owner) < 99)
     except:
