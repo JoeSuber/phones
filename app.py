@@ -1,8 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, flash, session, request, get_flashed_messages
+from flask import Flask, render_template, redirect, url_for, flash, session, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from flask_mail import Mail, Message
-from wtforms import StringField, PasswordField, BooleanField, IntegerField, ValidationError, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, IntegerField, ValidationError
 from wtforms.validators import InputRequired, Email, Length
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -62,14 +62,12 @@ print("Database file located at: {}".format(__sql_inventory_fn__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + __sql_inventory_fn__
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['WERKZEUG_DEBUG_PIN'] = False
-app.config.update(
-    MAIL_SERVER = 'localhost' if os.name == 'posix' else 'smtp.gmail.com',
-    MAIL_PORT = 25 if os.name == 'posix' else 465,
-    MAIL_USE_SSL = False,
-    MAIL_USE_TLS = False,
-    MAIL_USERNAME = 'joe.suber@dvtandc.com',
-    MAIL_PASSWORD = stamp
-)
+app.config['MAIL_SERVER'] = 'localhost' if os.name == 'posix' else 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 25 if os.name == 'posix' else 465,
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USERNAME'] = 'joe.suber@dvtandc.com'
+app.config['MAIL_PASSWORD'] = stamp
 
 print("mail server, port = {}, {}".format(app.config['MAIL_SERVER'], app.config['MAIL_PORT']))
 
