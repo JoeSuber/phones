@@ -109,7 +109,7 @@ class Phone(db.Model):
     In_Date = db.Column(db.DateTime)
     Archived = db.Column(db.Boolean)
     TesterId = db.Column(db.Integer)
-    DVT_Admin = db.Column(db.String(80))
+    DVT_Admin = db.Column(db.Integer)
     MSL = db.Column(db.String(50))
     History = db.Column(db.LargeBinary)
     Comment = db.Column(db.String(255))
@@ -357,6 +357,8 @@ def editdevice():
     except KeyError:    # protect against false access attempt
         return redirect(url_for('meidedit'))
     # fill is some form blanks for user:
+    tester = load_user(int(device.TesterId))
+    manager = load_user(int(device.DVT_Admin))
     newform = NewDevice(MEID=device.MEID,
                         SKU=device.SKU,
                         OEM=device.OEM,
@@ -382,7 +384,7 @@ def editdevice():
         used = session.pop('editingMEID')
         print(" {} MEID = {} was updated".format(device.SKU, used))
         return render_template('admin.html')
-    return render_template('editdevice.html', form=newform)
+    return render_template('editdevice.html', form=newform, tester=tester, manager=manager)
 
 
 @app.route(sub + '/editperson/<badge>', methods=['GET', 'POST'])
