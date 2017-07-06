@@ -741,6 +741,20 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     return True
 
 
+def tester_clean(fix=None):
+    """ Find non-numeric info in db that was accidentally imported under TesterId """
+    if fix is None:
+        fix = ''
+    for device in Phone.query.all():
+        if device.DVT_Admin and len(device.DVT_Admin) > 2:
+            print("admin: {}, {}".format(device.MEID, device.DVT_Admin))
+            device.DVT_Admin = fix
+        if device.TesterId and (not isinstance(device.TesterId, int)):
+            print("t: {}, {}".format(device.MEID, device.TesterId))
+            device.TesterId = ''
+    db.session.commit()
+
+
 def send_test(email):
     message = Message(subject="testes12..3?",
                       sender=app.config['MAIL_USERNAME'],
