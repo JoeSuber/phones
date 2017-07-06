@@ -742,7 +742,8 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
 
 
 def tester_clean(fix=None):
-    """ Find non-numeric info in db that was accidentally imported under TesterId """
+    """ Find non-numeric info in db that was accidentally imported under TesterId & DVT_Admin
+        'fix' is a number stored as string. i.e. '7' is the user.id for Daniel"""
     if fix is None:
         fix = ''
     for device in Phone.query.all():
@@ -753,6 +754,22 @@ def tester_clean(fix=None):
             print("t: {}, {}".format(device.MEID, device.TesterId))
             device.TesterId = ''
     db.session.commit()
+
+
+def swapm(oem, new_owner):
+    """ app.swapm('Blu', 7) """
+    try:
+        assert(int(new_owner) < 99)
+    except:
+        print("new owner should be an integer representing the db id.")
+        return False
+    print("looking for devices made by {}, to transfer to {}".format(oem, new_owner))
+    for device in Phone.query.all():
+        if device.OEM.lower() == oem.lower():
+            device.DVT_Admin = str(new_owner)
+            print("device {} has project manager = {}".format(device.MEID, new_owner))
+    db.session.commit()
+    return True
 
 
 def send_test(email):
