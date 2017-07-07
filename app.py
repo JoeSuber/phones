@@ -109,7 +109,7 @@ class Phone(db.Model):
     In_Date = db.Column(db.DateTime)
     Archived = db.Column(db.Boolean)
     TesterId = db.Column(db.Integer)
-    DVT_Admin = db.Column(db.Integer)
+    DVT_Admin = db.Column(db.String(80))
     MSL = db.Column(db.String(50))
     History = db.Column(db.LargeBinary)
     Comment = db.Column(db.String(255))
