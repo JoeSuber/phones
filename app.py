@@ -369,11 +369,11 @@ def editdevice():
                         Archived=device.Archived,
                         Comment=device.Comment)
     if tester:
-        testerstring = "{:20} :{}".format(tester.username, tester.badge)
+        testerstring = "  Tester: {:20} {}".format(tester.username, tester.badge)
     else:
         testerstring = "No current tester"
     if manager:
-        managerstring = "{:20} :{}".format(manager.username, manager.badge)
+        managerstring = "Manager: {:20} {}".format(manager.username, manager.badge)
     else:
         managerstring = "No current manager"
     if request.method == "POST":
