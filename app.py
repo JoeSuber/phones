@@ -368,6 +368,14 @@ def editdevice():
                         MSL=device.MSL,
                         Archived=device.Archived,
                         Comment=device.Comment)
+    if tester:
+        testerstring = "{:20} :{}".format(tester.username, tester.badge)
+    else:
+        testerstring = "No current tester"
+    if manager:
+        managerstring = "{:20} :{}".format(manager.username, manager.badge)
+    else:
+        managerstring = "No current manager"
     if request.method == "POST":
         history = pickle.loads(device.History)
         history.append((current_user.id, datetime.utcnow()))
@@ -384,7 +392,7 @@ def editdevice():
         used = session.pop('editingMEID')
         print(" {} MEID = {} was updated".format(device.SKU, used))
         return render_template('admin.html')
-    return render_template('editdevice.html', form=newform, tester=tester, manager=manager)
+    return render_template('editdevice.html', form=newform, tester=testerstring, manager=managerstring)
 
 
 @app.route(sub + '/editperson/<badge>', methods=['GET', 'POST'])

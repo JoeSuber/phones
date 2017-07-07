@@ -23,8 +23,8 @@ Edit Device Info
     <h2 class="form-signin-heading">Edit Device Data</h2>
     {{ form.hidden_tag() }}
     <l1> MEID   : {{ form.MEID.data }}</l1><br>
-    <l1> Tester : {{ tester.username }} id#{{ tester.id }}   badge: {{ tester.badge }}</l1><br>
-    <l1> Manager: {{ manager.username }} id#{{ manager.id }}  badge: {{ manager.badge }}</l1><br>
+    <l1> {{ tester }}</l1><br>
+    <l1> {{ manager }}</l1><br>
     {{ wtf.form_field(form.OEM) }}
     {{ wtf.form_field(form.SKU) }}
     {{ wtf.form_field(form.MODEL) }}
