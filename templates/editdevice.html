@@ -25,6 +25,7 @@ Edit Device Info
     <l1> MEID   : {{ form.MEID.data }}</l1><br>
     <l1> {{ tester }}</l1><br>
     <l1> {{ manager }}</l1><br>
+    {{ wtf.form_field(form.MEID) }}
     {{ wtf.form_field(form.OEM) }}
     {{ wtf.form_field(form.SKU) }}
     {{ wtf.form_field(form.MODEL) }}
