@@ -357,8 +357,8 @@ def editdevice():
     except KeyError:    # protect against false access attempt
         return redirect(url_for('meidedit'))
     # fill is some form blanks for user:
-    tester = load_user(int(device.TesterId))
-    manager = load_user(int(device.DVT_Admin))
+    tester = load_user(int(device.TesterId or 0))
+    manager = load_user(int(device.DVT_Admin or 0))
     newform = NewDevice(MEID=device.MEID,
                         SKU=device.SKU,
                         OEM=device.OEM,
