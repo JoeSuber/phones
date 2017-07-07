@@ -7,9 +7,11 @@ from wtforms.validators import InputRequired, Email, Length
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_table import Table, Col
 # from flask_sslify import SSLify
 import pickle, os, csv
 from datetime import datetime, timedelta
+from random import randint
 
 try:
     from papers import stamp, basedir, use_local_mail
@@ -120,6 +122,13 @@ db.create_all()
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+##########################
+###     Tables         ###
+##########################
+
+class People(Table):
+    username = Col('username')
+    badge = Col('badge')
 
 ##########################
 ##### Validators #########
@@ -266,6 +275,8 @@ def meid():
 @login_required  ### <-- uncomment after adding first admin user to database
 def newperson():
     form = RegisterForm()
+    if request.method == 'GET':
+        form.badge.data = unique_badge()
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
         logged = User(badge=form.badge.data,
@@ -493,6 +504,15 @@ def logout():
     logout_user()
     session['userid'] = None
     return redirect(url_for('index'))
+
+
+@app.route(sub + '/people')
+@login_required
+def people():
+    items = User.query.all()
+    table = People(items)
+    return render_template('people.html', table=table)
+
 
 ################################
 ###### Import/Export Data ######
@@ -788,6 +808,15 @@ def send_test(email):
                       sender=app.config['MAIL_USERNAME'],
                       recipients=[email])
     mail.send(message)
+
+
+def unique_badge():
+    rando = str(randint(1000000000, 9999999999))
+    badge = User.query.filter_by(badge=rando).first()
+    print("rando badge query = {}".format(badge))
+    if badge:
+        unique_badge()
+    return rando
 
 
 if __name__ == '__main__':
