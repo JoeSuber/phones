@@ -130,6 +130,16 @@ class People(Table):
     username = Col('username')
     badge = Col('badge')
 
+
+class Devices(Table):
+    MEID = Col('MEID')
+    TesterID = Col('Tester')
+    SKU = Col('SKU')
+    OEM = Col('OEM')
+    MODEL = Col('Model')
+    DVT_Admin = Col('Manager')
+
+
 ##########################
 ##### Validators #########
 ##########################
@@ -238,7 +248,6 @@ def index():
     message = None
     if 'message' in session:
         message = session.pop('message')
-
     return render_template('index.html', form=form, message=message)
 
 
@@ -571,9 +580,9 @@ def datefix(datestr):
 
 
 def csv_import(filename=None):
-    """ For importing devices into database.
+    """ For importing devices into database from existing spreadsheet.
         Assumes users have kept columns in the _column list-order.
-        (to use, download and save the inventory sheets as .csv files with those
+        (to use, save the inventory sheets as local .csv files with those
         particular columns, in the same column order)
         """
     if not filename:
@@ -811,6 +820,7 @@ def send_test(email):
 
 
 def unique_badge():
+    """ keep trying until a new random badge number has been found to return """
     rando = str(randint(1000000000, 9999999999))
     badge = User.query.filter_by(badge=rando).first()
     print("rando badge query = {}".format(badge))
