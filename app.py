@@ -141,8 +141,8 @@ class Devices(Table):
 
 
 class Historical(Table):
-    User = Col('Possessor')
-    Date = Col('taken date')
+    User = Col('Responsible:    ')
+    Date = Col('    taken date:  ')
 
 
 ##########################
