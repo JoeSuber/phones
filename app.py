@@ -10,7 +10,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_table import Table, Col
 # from flask_sslify import SSLify
 import pickle, os, csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from random import randint
 
 try:
@@ -138,6 +138,11 @@ class Devices(Table):
     OEM = Col('OEM')
     MODEL = Col('Model')
     DVT_Admin = Col('Manager')
+
+
+class Historical(Table):
+    User = Col('Possessor')
+    Date = Col('taken date')
 
 
 ##########################
@@ -483,8 +488,8 @@ def oemreport():
 @app.route(sub + '/overdue', methods=['GET', 'POST'])
 @login_required
 def overdue():
-    user=load_user(current_user.id)
-    form=OverdueForm()
+    user = load_user(current_user.id)
+    form = OverdueForm()
     if form.validate_on_submit():
         email, fn = overdue_report(current_user.id,
                                    days=form.timeframe.data,
@@ -521,6 +526,21 @@ def people():
     items = User.query.all()
     table = People(items)
     return render_template('people.html', table=table)
+
+
+@app.route(sub + '/history', methods=['GET', 'POST'])
+@login_required
+def history():
+    form = MeidForm()
+    records = Historical([])
+    print("hey")
+    if form.validate_on_submit():
+        records = retrieve_history(form.meid.data)
+        print(records)
+        records = Historical(records)
+        print(records)
+        return render_template('history.html', form=form, records=records)
+    return render_template('history.html', form=form, records=records)
 
 
 ################################
@@ -817,6 +837,25 @@ def send_test(email):
                       sender=app.config['MAIL_USERNAME'],
                       recipients=[email])
     mail.send(message)
+
+
+def utc_to_local(utc_dt):
+    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
+
+def retrieve_history(meid, date_filter=":%b %d, %Y, %I.%M %p"):
+    """ http://strftime.org/ """
+    device = Phone.query.filter_by(MEID=meid).first()
+    if not device:
+        return []
+    history = pickle.loads(device.History)
+    herstory = []
+    for event in history:
+        id, date = event
+        date = utc_to_local(date)
+        person = User.query.filter_by(id=id).first()
+        herstory.append({'User': person.username, 'Date': date.strftime(date_filter)})
+    return herstory
 
 
 def unique_badge():
