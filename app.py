@@ -656,7 +656,7 @@ def nameid(id_num):
 
 
 def newpeople(filename=None):
-    """ Import people from the spreadsheet. Save it as a csv"""
+    """ Import people from the spreadsheet. Save it as a csv. Also can change the info for a user.id"""
     if not filename:
         filename = os.path.join(os.getcwd(), "People.csv")
         print("filename = {}".format(filename))
