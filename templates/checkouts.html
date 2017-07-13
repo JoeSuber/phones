@@ -19,7 +19,7 @@ Who Has What
 
 <div class="container">
 
-  <form class="form-signin" method="POST" action="{{ url_for('history') }}">
+  <form class="form-signin" method="POST" action="{{ url_for('checkouts') }}">
     <h2 class="form-signin-heading">Which Devices are Checked Out to:</h2>
     {{ form.hidden_tag() }}
     {{ wtf.form_field(form.badge) }}
