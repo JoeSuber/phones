@@ -146,14 +146,14 @@ class Historical(Table):
 
 
 class Checked_Out(Table):
-    MEID = Col('MEID')
-    SKU = Col('SKU')
-    OEM = Col('OEM')
-    Serial_Number = Col('Ser. Num.')
-    Hardware_Version = Col('H. Ver.')
-    MODEL = Col('Model')
-    MSL = Col('MSL')
-    Comment = Col('Comment')
+    MEID = Col('MEID___________:')
+    SKU = Col('SKU____:')
+    OEM = Col('OEM_____:')
+    Serial_Number = Col('Serial Number__:')
+    Hardware_Version = Col('Hardware Version__:')
+    MODEL = Col('Model___:')
+    MSL = Col('MSL____:')
+    Comment = Col('Comment___:')
 
 
 ##########################
@@ -544,11 +544,14 @@ def people():
 def checkouts():
     form = BadgeEntryForm()
     records = Checked_Out([])
+    user = ""
     if form.validate_on_submit():
         records = users_devices(form.badge.data)
         records = Checked_Out(records)
-        return render_template('checkouts.html', form=form, records=records)
-    return render_template('checkouts.html', form=form, records=records)
+        user = User.query.filter_by(badge=form.badge.data).first()
+        user = user.username
+        return render_template('checkouts.html', form=form, records=records, user=user)
+    return render_template('checkouts.html', form=form, records=records, user=user)
 
 
 @app.route(sub + '/history', methods=['GET', 'POST'])
@@ -883,7 +886,8 @@ def users_devices(badge):
     """ find all devices owned by a person """
     user = User.query.filter_by(badge=badge).first()
     id = str(user.id)
-    return Phone.query.filter_by(TesterID=id).all()
+    return Phone.query.filter_by(TesterId=id).all()
+
 
 def unique_badge():
     """ keep trying until a new random badge number has been found to return """
