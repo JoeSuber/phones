@@ -145,6 +145,17 @@ class Historical(Table):
     Date = Col('    taken date:  ')
 
 
+class Checked_Out(Table):
+    MEID = Col('MEID')
+    SKU = Col('SKU')
+    OEM = Col('OEM')
+    Serial_Number = Col('Ser. Num.')
+    Hardware_Version = Col('H. Ver.')
+    MODEL = Col('Model')
+    MSL = Col('MSL')
+    Comment = Col('Comment')
+
+
 ##########################
 ##### Validators #########
 ##########################
@@ -528,17 +539,26 @@ def people():
     return render_template('people.html', table=table)
 
 
+@app.route(sub + '/checkouts', methods=['GET', 'POST'])
+@login_required
+def checkouts():
+    form = BadgeEntryForm()
+    records = Checked_Out([])
+    if form.validate_on_submit():
+        records = users_devices(form.badge.data)
+        records = Checked_Out(records)
+        return render_template('checkouts.html', form=form, records=records)
+    return render_template('checkouts.html', form=form, records=records)
+
+
 @app.route(sub + '/history', methods=['GET', 'POST'])
 @login_required
 def history():
     form = MeidForm()
     records = Historical([])
-    print("hey")
     if form.validate_on_submit():
         records = retrieve_history(form.meid.data)
-        print(records)
         records = Historical(records)
-        print(records)
         return render_template('history.html', form=form, records=records)
     return render_template('history.html', form=form, records=records)
 
@@ -844,7 +864,8 @@ def utc_to_local(utc_dt):
 
 
 def retrieve_history(meid, date_filter=":%b %d, %Y, %I.%M %p"):
-    """ http://strftime.org/ """
+    """ http://strftime.org/
+        unpickles and formats the history of a device into a list of dict"""
     device = Phone.query.filter_by(MEID=meid).first()
     if not device:
         return []
@@ -857,6 +878,12 @@ def retrieve_history(meid, date_filter=":%b %d, %Y, %I.%M %p"):
         herstory.append({'User': person.username, 'Date': date.strftime(date_filter)})
     return herstory
 
+
+def users_devices(badge):
+    """ find all devices owned by a person """
+    user = User.query.filter_by(badge=badge).first()
+    id = str(user.id)
+    return Phone.query.filter_by(TesterID=id).all()
 
 def unique_badge():
     """ keep trying until a new random badge number has been found to return """
