@@ -47,6 +47,10 @@ $ sudoedit /etc/apache2/sites-available/app.conf
  Require all granted
 </Directory>
 </VirtualHost>
+## end app.conf ##
+
+tar -cvpzf ~/backup/phones.tar.gz ~/phones/
+
 """
 
 ###################################################################################
