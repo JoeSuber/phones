@@ -16,6 +16,7 @@ from random import randint
 try:
     from papers import stamp, basedir, use_local_mail
 except:
+    print("WARNING! You have no papers.")
     stamp = ''
     basedir = ''
     use_local_mail = True
@@ -363,9 +364,6 @@ def newpass():
     form = ChangePassword()
     if form.validate_on_submit() and user.admin:
         changer = User.query.filter_by(username=form.account.data).first()
-        # allow any admin to change any non-admin. Only allow admin to change their own.
-        print("user.username = {}".format(user.username))
-        print("changer.username = {}".format(changer.username))
         if user.admin or (user.username == changer.username):
             if form.password.data == form.retype.data:
                 changer.password = generate_password_hash(form.password.data)
