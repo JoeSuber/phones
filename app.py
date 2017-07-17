@@ -351,7 +351,7 @@ def newdevice():
 def admin():
     user = User.query.get(int(current_user.id))
     if user.admin:
-        table = People(User.query.all())
+        table = People(User.query.all(), border=True)
         return render_template('admin.html', name=user.username, table=table)
     return redirect(url_for('login'))
 
@@ -551,7 +551,7 @@ def checkouts():
     user = ""
     if form.validate_on_submit():
         records = users_devices(form.badge.data)
-        records = Checked_Out(records)
+        records = Checked_Out(records, border=True)
         user = User.query.filter_by(badge=form.badge.data).first()
         user = user.username
         return render_template('checkouts.html', form=form, records=records, user=user)
@@ -566,7 +566,7 @@ def history():
     records = Historical([])
     if form.validate_on_submit():
         records = retrieve_history(form.meid.data)
-        records = Historical(records)
+        records = Historical(records, border=True)
         return render_template('history.html', form=form, records=records)
     return render_template('history.html', form=form, records=records)
 
