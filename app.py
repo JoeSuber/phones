@@ -545,6 +545,7 @@ def people():
 @app.route(sub + '/checkouts', methods=['GET', 'POST'])
 @login_required
 def checkouts():
+    """ Show all devices possessed by a particular user """
     form = BadgeEntryForm()
     records = Checked_Out([])
     user = ""
@@ -560,6 +561,7 @@ def checkouts():
 @app.route(sub + '/history', methods=['GET', 'POST'])
 @login_required
 def history():
+    """ show history of who has had a particular device and when """
     form = MeidForm()
     records = Historical([])
     if form.validate_on_submit():
