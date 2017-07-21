@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TIME=`date +%b-%d-%y`
+TIME=`date +%a`
 FILENAME=backup-$TIME.tar.gz
 SRCDIR=/home/joe.suber/phones
 DESDIR=/home/joe.suber/backup
