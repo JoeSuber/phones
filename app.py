@@ -351,7 +351,8 @@ def newdevice():
 def admin():
     user = User.query.get(int(current_user.id))
     if user.admin:
-        table = People(User.query.all(), border=True)
+        peeps = User.query.order_by(User.username).all()
+        table = People(peeps, border=True)
         return render_template('admin.html', name=user.username, table=table)
     return redirect(url_for('login'))
 
