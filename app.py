@@ -883,10 +883,6 @@ def retrieve_history(meid, date_filter=":%b %d, %Y, %I.%M %p"):
     for event in history:
         print("event = {}".format(event))
         id, date = event
-        ###  Horrible Hack to fix badly imported data from Daniel Melech ###
-        if id == '':
-            id = 7
-        ###  Above could result in other badly imported data being assigned to his id ###
         date = utc_to_local(date)
         person = User.query.filter_by(id=id).first()
         herstory.append({'User': person.username, 'Date': date.strftime(date_filter)})
@@ -908,6 +904,25 @@ def unique_badge():
     if badge:
         unique_badge()
     return rando
+
+
+def check_histories():
+    devices = Phone.query.all()
+    for device in devices:
+        history = pickle.loads(device.History)
+        newid = None
+        dates = []
+        for entry in history:
+            id, date = entry
+            dates.append(date)
+            if id == '':
+                print("device: {}, {}, {}, {}".format(device.MEID, device.DVT_Admin, device.TesterId, device.OEM))
+                newid = device.TesterId
+        if newid:
+            device.History = pickle.dumps([(newid, old_date) for old_date in dates])
+            db.session.commit()
+            print("fixed")
+    print("DONE!")
 
 
 if __name__ == '__main__':
