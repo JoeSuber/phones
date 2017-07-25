@@ -907,6 +907,8 @@ def unique_badge():
 
 
 def check_histories():
+    """ run from command line to fix the import error caused by leaving the TesterID cells blank
+        Also will verify that that the device checkout histories that exist all have the required info """
     devices = Phone.query.all()
     for device in devices:
         history = pickle.loads(device.History)
