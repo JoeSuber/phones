@@ -881,7 +881,12 @@ def retrieve_history(meid, date_filter=":%b %d, %Y, %I.%M %p"):
     history = pickle.loads(device.History)
     herstory = []
     for event in history:
+        print("event = {}".format(event))
         id, date = event
+        ###  Horrible Hack to fix badly imported data from Daniel Melech ###
+        if id == '':
+            id = 7
+        ###  Above could result in other badly imported data being assigned to his id ###
         date = utc_to_local(date)
         person = User.query.filter_by(id=id).first()
         herstory.append({'User': person.username, 'Date': date.strftime(date_filter)})
