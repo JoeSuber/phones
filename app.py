@@ -637,14 +637,24 @@ def csv_import(filename=None):
     if not filename:
         filename = os.path.join(os.getcwd(), "scotts.csv")
     columns = _columns
+    column_checksum = len(columns)
+    if column_checksum != len(set(columns)):
+        print("Your expected column headers contain repeats. Not gonna work!")
+        return False
     new_item_count, existing_item_count = 0, 0
     with open(filename, "rU") as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',', quotechar='"')
-        column_checksum = len(columns)
         for num, line in enumerate(spamreader):
-            if not new_item_count:  # skip the row labels
+            if not new_item_count:      # first line should be the column labels
+                ## check the column labels to head off import errors ##
+                for present, reference in zip(line, columns):
+                    if present.strip() != reference.strip():
+                        print("for: {}".format(filename))
+                        print("the column headers are not correct: {} != {}".format(present, reference))
+                        return False    # abort!
                 new_item_count = 1
                 continue
+
             row = {label: item.strip() for label, item in zip(columns, line)}
             if len(row) != column_checksum:
                 print("ABORT! on bad row: {}".format(row))
@@ -656,7 +666,15 @@ def csv_import(filename=None):
                 existing_item_count += 1
                 print("!{:5} Item exists {}".format(num, row['MEID']))
                 continue
-
+            try:
+                admin = User.query.filter_by(id=int(row['DVT_Admin'].strip())).first()
+            except Exception as e:
+                print("{} ERROR:".format(e))
+                admin = None
+            if not admin:
+                print(type(row['DVT_Admin']), len(row['DVT_Admin']))
+                print("!{:5} skipped due to non-existant DVT_admin: '{}'".format(num, row['DVT_Admin']))
+                continue
             print("#{:5}: {}".format(num, row))
             new_device = Phone(OEM=row['OEM'],
                                MEID=row['MEID'],
@@ -676,7 +694,6 @@ def csv_import(filename=None):
                 new_item_count += 1
             except Exception as e:
                 print("ER: {}, {}".format(e, new_device))
-
         db.session.commit()
     print("imported {} items".format(new_item_count - 1))
     print("ignored {} existing items".format(existing_item_count))
@@ -684,13 +701,13 @@ def csv_import(filename=None):
 
 
 def import_all_sheets(fns=None):
-    """ gather up the .csv files and import them all at once """
+    """ gather up the .csv files with 'newsheet' in the title and import them all at once """
     base = os.getcwd()
     if not fns:
         fns = [os.path.join(base, fn) for fn in os.listdir(base) if fn.endswith(".csv") and ('newsheet' in fn)]
     for fn in fns:
-        print("processing {}".format(fn))
-        csv_import(filename=fn)
+        result = csv_import(filename=fn)
+        print("processed {}: {}".format(fn, result))
     return 1
 
 
@@ -828,21 +845,6 @@ def send_report(email, attachment_fn, sender=None, subject='Overdue Devices Repo
     mail.send(message)
     print("sent mail from {} to {}".format(sender, email))
     return True
-
-
-def tester_clean(fix=None):
-    """ Find non-numeric info in db that was accidentally imported under TesterId & DVT_Admin
-        'fix' is a number stored as string. i.e. '7' is the user.id for Daniel"""
-    if fix is None:
-        fix = ''
-    for device in Phone.query.all():
-        if device.DVT_Admin and len(device.DVT_Admin) > 2:
-            print("admin: {}, {}".format(device.MEID, device.DVT_Admin))
-            device.DVT_Admin = fix
-        if device.TesterId and (not isinstance(device.TesterId, int)):
-            print("t: {}, {}".format(device.MEID, device.TesterId))
-            device.TesterId = ''
-    db.session.commit()
 
 
 def swapm(oem, new_owner):
