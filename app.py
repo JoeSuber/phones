@@ -50,6 +50,7 @@ $ sudoedit /etc/apache2/sites-available/app.conf
 </VirtualHost>
 ## end app.conf ##
 
+### How to set the backup ###
 tar -cvpzf ~/backup/phones.tar.gz ~/phones/
 
 """
@@ -632,7 +633,8 @@ def csv_import(filename=None):
     """ For importing devices into database from existing spreadsheet.
         Assumes users have kept columns in the _column list-order.
         (to use, save the inventory sheets as local .csv files with those
-        particular columns, in the same column order)
+        particular columns, in the same column order, run from console and/or use
+        'app.import_all_sheets()')
         """
     if not filename:
         filename = os.path.join(os.getcwd(), "scotts.csv")
