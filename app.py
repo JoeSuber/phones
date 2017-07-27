@@ -950,7 +950,7 @@ def meidication(adminid=None):
     while os.path.exists(fn):
         fn = fn + "_{}".format(adminid)
     with open(fn, 'w') as fob:
-        fob.writelines([d.MEID for d in to_fix])
+        fob.writelines([d.MEID + os.linesep for d in to_fix])
     print("{} MEID will be truncated to 14 characters and saved in file '{}'".format(len(to_fix), fn))
     for device in to_fix:
         device.MEID = device.MEID[:14]
