@@ -947,7 +947,7 @@ def meidication(adminid=None):
 
     to_fix = [d for d in devices if len(d.MEID) > 14 and (not Phone.query.filter_by(MEID=d.MEID[:14]).first())]
     fn = os.getcwd() + "fixed_MEID_for_id_{}".format(adminid)
-    if os.path.exists(fn):
+    while os.path.exists(fn):
         fn = fn + "_{}".format(adminid)
     with open(fn, 'w') as fob:
         fob.writelines(to_fix)
