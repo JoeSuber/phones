@@ -12,6 +12,8 @@ from flask_table import Table, Col
 import pickle, os, csv
 from datetime import datetime, timedelta, timezone
 from random import randint
+from collections import Counter
+
 
 try:
     from papers import stamp, basedir, use_local_mail
@@ -929,6 +931,31 @@ def check_histories():
             db.session.commit()
             print("fixed")
     print("DONE!")
+
+
+def meidication(adminid=None):
+    if adminid is None:
+        admins = User.query.filter_by(admin=True).all()
+        for perp in admins:
+            print("{:5} - {}".format(perp.id, perp.username))
+        print("   ----------   ")
+        adminid = int(input("Enter the id to use: "))
+
+    devices = Phone.query.filter_by(DVT_Admin='{}'.format(adminid)).all()
+    tally = Counter([len(device.MEID) for device in devices])
+    print(tally)
+
+    to_fix = [d for d in devices if len(d.MEID) > 14 and (not Phone.query.filter_by(MEID=d.MEID[:14]).first())]
+    fn = os.getcwd() + "fixed_MEID_for_id_{}".format(adminid)
+    if os.path.exists(fn):
+        fn = fn + "_{}".format(adminid)
+    with open(fn, 'w') as fob:
+        fob.writelines(to_fix)
+    print("{} MEID will be truncated to 14 characters and saved in file '{}'".format(len(to_fix), fn))
+    for device in to_fix:
+        device.MEID = device.MEID[:14]
+    db.session.commit()
+    print("database updated!")
 
 
 if __name__ == '__main__':
