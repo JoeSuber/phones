@@ -868,6 +868,7 @@ def swapm(oem, new_owner):
 
 
 def oems():
+    """ show the project managers, the oems, and the device counts """
     devices = Phone.query.all()
     oems = Counter([device.OEM for device in devices])
     managers = Counter([(device.DVT_Admin, device.OEM) for device in devices])
