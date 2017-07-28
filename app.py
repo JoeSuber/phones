@@ -875,7 +875,7 @@ def oems():
     outlist = []
     for m in managers:
         output = (nameid(m[0]), m[0], m[1], managers[m], oems[m[1]])
-        print("{} id#{} - {}: {} - of {}".format(output[0], output[1], output[2], output[3], output[4]))
+        print("{} id#{} has {}: {} - of {}".format(output[0], output[1], output[2], output[3], output[4]))
         outlist.append(output)
     return outlist
 
