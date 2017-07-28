@@ -867,6 +867,18 @@ def swapm(oem, new_owner):
     return True
 
 
+def oems():
+    devices = Phone.query.all()
+    oems = Counter([device.OEM for device in devices])
+    managers = Counter([(device.DVT_Admin, device.OEM) for device in devices])
+    outlist = []
+    for m in managers:
+        output = (nameid(m[0]), m, managers[m], oems[m[1]])
+        print("{} - {}: {} - of {}".format(output[0], output[1], output[2], output[3]))
+        outlist.append(output)
+    return outlist
+
+
 def send_test(email):
     message = Message(subject="testes12..3?",
                       sender=app.config['MAIL_USERNAME'],
@@ -934,6 +946,7 @@ def check_histories():
 
 
 def meidication(adminid=None):
+    """ fix the MEID where an IMEI (or some other improper thing was entered) by truncating to 14 characters"""
     if adminid is None:
         admins = User.query.filter_by(admin=True).all()
         for perp in admins:
