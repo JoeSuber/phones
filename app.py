@@ -975,6 +975,7 @@ def meidication(adminid=None):
 def look_for_blanks():
     devices = Phone.query.filter_by(MODEL="", SKU="").all()
     print(devices)
+    return devices
 
 
 if __name__ == '__main__':
