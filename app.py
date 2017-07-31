@@ -972,6 +972,11 @@ def meidication(adminid=None):
     print("database updated!")
 
 
+def look_for_blanks():
+    devices = Phone.query.filter_by(MODEL="", SKU="").all()
+    print(devices)
+
+
 if __name__ == '__main__':
     if os.name == 'nt':
         app.run(debug=True)
