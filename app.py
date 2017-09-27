@@ -300,9 +300,7 @@ def meid():
         devices = [device1, device2, device3, device4, device5]
         messages = []
         for device in devices:
-            print("yo")
             if device and session['userid']:
-                print("hey")
                 # change owner of device and append new owner to history blob ####
                 device.TesterId = session['userid']
                 device.In_Date = datetime.utcnow()
