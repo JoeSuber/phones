@@ -189,6 +189,12 @@ class Exists(Unique):
         if not check:
             raise ValidationError(self.message)
 
+class Exists_Or_Blank(Unique):
+    def __call__(self, form, field):
+        if field.data:
+            check = self.model.query.filter(self.field == field.data).first()
+            if not check:
+                raise ValidationError(self.message)
 
 ##########################
 ######## Forms ###########
@@ -201,10 +207,16 @@ class BadgeEntryForm(FlaskForm):
 
 
 class MeidForm(FlaskForm):
-    meid = StringField('MEID', validators=[InputRequired(),
-                                           Exists(Phone, Phone.MEID,
-                                                  message="MEID does not match any devices in database")])
-
+    meid = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                           message="MEID does not match any devices in database")])
+    meid2 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                           message="MEID does not match any devices in database")])
+    meid3 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                           message="MEID does not match any devices in database")])
+    meid4 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
+    meid5 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
 
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(),
@@ -280,19 +292,28 @@ def meid():
     # step 2, get the device, change owner
     form = MeidForm()
     if form.validate_on_submit():
-        device = Phone.query.filter_by(MEID=form.meid.data).first()
-        if device and session['userid']:
-            # change owner of device and append new owner to history blob ####
-            device.TesterId = session['userid']
-            device.In_Date = datetime.utcnow()
-            history = pickle.loads(device.History)
-            history.append((session['userid'], datetime.utcnow()))
-            device.History = pickle.dumps(history)
-            db.session.commit()
-            session['message'] = "{} takes: {} - {}  {}  meid: {}".format(load_user(session['userid']).username,
-                                                                          device.OEM, device.SKU, device.MODEL,
-                                                                          device.MEID)
-            session['userid'], device = None, None
+        device1 = Phone.query.filter_by(MEID=form.meid.data).first()
+        device2 = Phone.query.filter_by(MEID=form.meid2.data).first()
+        device3 = Phone.query.filter_by(MEID=form.meid3.data).first()
+        device4 = Phone.query.filter_by(MEID=form.meid4.data).first()
+        device5 = Phone.query.filter_by(MEID=form.meid5.data).first()
+        devices = [device1, device2, device3, device4, device5]
+        messages = []
+        for device in devices:
+            print("yo")
+            if device and session['userid']:
+                print("hey")
+                # change owner of device and append new owner to history blob ####
+                device.TesterId = session['userid']
+                device.In_Date = datetime.utcnow()
+                history = pickle.loads(device.History)
+                history.append((session['userid'], datetime.utcnow()))
+                device.History = pickle.dumps(history)
+                db.session.commit()
+                phrase = "{} - {}  {}  meid: {}".format(device.OEM, device.SKU, device.MODEL, device.MEID)
+                messages.append(phrase)
+        session['message'] = load_user(session['userid']).username + " took: " + ", ".join(messages)
+        session['userid'], devices = None, None
         return redirect(url_for('index'))   # success!
 
     if ('userid' in session) and session['userid']:

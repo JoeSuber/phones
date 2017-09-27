@@ -18,12 +18,16 @@ Device Entry
 {% endblock %}
 
     <div class="container">
-    <b>Taking Device: {{ name }} </b>
       <form class="form-signin" method="POST" action="{{ url_for('meid') }}">
-        <h2 class="form-signin-heading">Enter Device MEID</h2>
+        <h2 class="form-signin-heading">{{ name }} will take MEID(s):</h2>
         {{ form.hidden_tag() }}
-        {{ wtf.form_field(form.meid) }}
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Enter MEID</button>
+          {{ wtf.form_field(form.meid) }}
+          {{ wtf.form_field(form.meid2) }}
+          {{ wtf.form_field(form.meid3) }}
+          {{ wtf.form_field(form.meid4) }}
+          {{ wtf.form_field(form.meid5) }}
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Transfer MEID(s)</button>
       </form>
     </div> <!-- /container -->
 {% endblock %}
