@@ -937,8 +937,12 @@ def retrieve_history(meid, date_filter=":%b %d, %Y, %I.%M %p"):
         print("event = {}".format(event))
         id, date = event
         date = utc_to_local(date)
-        person = User.query.filter_by(id=id).first()
-        herstory.append({'User': person.username, 'Date': date.strftime(date_filter)})
+        if id is not None:
+            person = User.query.filter_by(id=id).first()
+            username = person.username
+        else:
+            username = "Original PM"
+        herstory.append({'User': username, 'Date': date.strftime(date_filter)})
     return herstory
 
 
