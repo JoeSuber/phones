@@ -217,6 +217,16 @@ class MeidForm(FlaskForm):
                                                             message="MEID does not match any devices in database")])
     meid5 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
                                                             message="MEID does not match any devices in database")])
+    meid6 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
+    meid7 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
+    meid8 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
+    meid9 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
+    meid10 = StringField('MEID', validators=[Exists_Or_Blank(Phone, Phone.MEID,
+                                                            message="MEID does not match any devices in database")])
 
 class LoginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(),
@@ -297,7 +307,12 @@ def meid():
         device3 = Phone.query.filter_by(MEID=form.meid3.data).first()
         device4 = Phone.query.filter_by(MEID=form.meid4.data).first()
         device5 = Phone.query.filter_by(MEID=form.meid5.data).first()
-        devices = [device1, device2, device3, device4, device5]
+        device6 = Phone.query.filter_by(MEID=form.meid.data).first()
+        device7 = Phone.query.filter_by(MEID=form.meid2.data).first()
+        device8 = Phone.query.filter_by(MEID=form.meid3.data).first()
+        device9 = Phone.query.filter_by(MEID=form.meid4.data).first()
+        device10 = Phone.query.filter_by(MEID=form.meid5.data).first()
+        devices = [device1, device2, device3, device4, device5, device6, device7, device8, device9, device10]
         messages = []
         for device in devices:
             if device and session['userid']:
