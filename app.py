@@ -307,11 +307,11 @@ def meid():
         device3 = Phone.query.filter_by(MEID=form.meid3.data).first()
         device4 = Phone.query.filter_by(MEID=form.meid4.data).first()
         device5 = Phone.query.filter_by(MEID=form.meid5.data).first()
-        device6 = Phone.query.filter_by(MEID=form.meid.data).first()
-        device7 = Phone.query.filter_by(MEID=form.meid2.data).first()
-        device8 = Phone.query.filter_by(MEID=form.meid3.data).first()
-        device9 = Phone.query.filter_by(MEID=form.meid4.data).first()
-        device10 = Phone.query.filter_by(MEID=form.meid5.data).first()
+        device6 = Phone.query.filter_by(MEID=form.meid6.data).first()
+        device7 = Phone.query.filter_by(MEID=form.meid7.data).first()
+        device8 = Phone.query.filter_by(MEID=form.meid8.data).first()
+        device9 = Phone.query.filter_by(MEID=form.meid9.data).first()
+        device10 = Phone.query.filter_by(MEID=form.meid10.data).first()
         devices = [device1, device2, device3, device4, device5, device6, device7, device8, device9, device10]
         messages = []
         for device in devices:
